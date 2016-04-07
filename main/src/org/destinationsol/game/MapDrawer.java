@@ -74,6 +74,7 @@ public class MapDrawer {
   private float myAreaSkullTime;
   private final float myIconRad;
 
+
   public MapDrawer(TextureManager textureManager, float screenHeight) {
     myZoom = MAX_ZOOM / MUL_FACTOR / MUL_FACTOR;
     float minIconRad = MIN_ICON_RAD_PX / screenHeight;
@@ -234,7 +235,6 @@ public class MapDrawer {
   private void drawIcons(GameDrawer drawer, SolGame game, float iconSz, float viewDist, FactionManager factionManager,
     SolShip hero, Vector2 camPos, float heroDmgCap)
   {
-
     List<SolObject> objs = game.getObjMan().getObjs();
     for (int i1 = 0, objsSize = objs.size(); i1 < objsSize; i1++) {
       SolObject o = objs.get(i1);
@@ -250,6 +250,15 @@ public class MapDrawer {
         StarPort sp = (StarPort) o;
         drawStarPortIcon(drawer, iconSz, sp.getFrom(), sp.getTo());
       }
+      // Fix for when the player is in hyper. Hero is null and replaced in ObjMan with a StarPort.Transcendent
+      if ((o instanceof StarPort.Transcendent)) {
+        StarPort.Transcendent t = (StarPort.Transcendent)o;
+        if (t.getShip().getPilot().isPlayer()) {
+          FarShip ship = game.getTranscendentHero().getShip();
+          drawObjIcon(iconSz, oPos, t.getAngle(), factionManager, hero, ship.getPilot().getFaction(), heroDmgCap, o, ship.getHullConfig().getIcon(), drawer);
+        }
+
+      }
     }
 
     List<FarShip> farShips = game.getObjMan().getFarShips();
@@ -261,6 +270,7 @@ public class MapDrawer {
       if (hint == null && !DebugOptions.DETAILED_MAP) continue;
       drawObjIcon(iconSz, oPos, ship.getAngle(), factionManager, hero, ship.getPilot().getFaction(), heroDmgCap, ship, ship.getHullConfig().getIcon(), drawer);
     }
+
     List<StarPort.MyFar> farPorts = game.getObjMan().getFarPorts();
     for (int i = 0, sz = farPorts.size(); i < sz; i++) {
       StarPort.MyFar sp = farPorts.get(i);
