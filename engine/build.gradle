@@ -1,0 +1,39 @@
+apply from: '../config/gradle/common.gradle'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies {
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+    compile "org.terasology:gestalt-util:6.0.0"
+    compile "org.terasology:gestalt-module:6.0.0"
+    compile "org.terasology:gestalt-asset-core:6.0.0"
+    compile "org.terasology:gestalt-entity-system:6.0.0"
+}
+
+sourceSets {
+    // Main is almost everything - the true engine
+    main {
+        java {
+            output.classesDir 'build/classes'
+        }
+        // This makes the resources (assets, 3d wizardry includes, etc) also go to build/classes
+        output.resourcesDir 'build/classes'
+    }
+}
+
+jar {
+    archiveName = "sol.jar"
+
+    doFirst {
+        copy {
+            from 'src/SolAppListener.gwt.xml'
+            into 'build/classes/main'
+        }
+    }
+}
+
+eclipse.project {
+    name = appName + "-main"
+}

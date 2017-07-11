@@ -1,0 +1,24 @@
+{
+    "standard": {
+        "temporaryEnemies": [
+            {
+                "hull": "core:minerSmall",
+                "items": "core:missileLauncher",
+                "money": 100,
+                "density": 0.002
+            }
+        ]
+    },
+
+    "hard": {
+    	"hard": true,
+        "temporaryEnemies": [
+            {
+                "hull": "core:minerMedium",
+                "items": "core:nailGun core:mediumArmor 0.5|core:shield",
+                "money": 100,
+                "density": 0.002
+            }
+        ]
+    }
+}
